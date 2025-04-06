@@ -1,0 +1,2 @@
+firefox:
+    pkg.absent

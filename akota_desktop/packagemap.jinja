@@ -1,0 +1,30 @@
+{% set package_sources = salt['grains.filter_by']({
+        'Fedora': {
+                'default': {},
+        },
+        'Arch': {
+                'default': {},
+        },
+        'Debian': {
+                'default': {
+                'opentofu':'tofu',
+                'python-pip':'python3-pip',
+                'python-virtualenv':'python3-virtualenv'
+                },
+                'custom_repos': {
+                'vts':'ppa:deadsnakes/ppa',
+                'opentofu':'deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main',
+                }
+        },
+}, merge=salt['pillar.get']('packages')) %}
+
+{% set generic_package_sources = {
+                'AppImage': {
+                        'nekoray':'https://github.com/MatsuriDayo/nekoray/releases/download/4.0.1/nekoray-4.0.1-2024-12-12-linux-x64.AppImage'
+                },
+                'Flatpak': {
+                        'keyguard':'https://github.com/AChep/keyguard-app/releases/download/r20250324/Keyguard.flatpak',
+                        'podman':'https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2.flatpak'
+                },
+        } 
+%}

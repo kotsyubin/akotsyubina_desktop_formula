@@ -1,0 +1,8 @@
+{% set userlist = salt['user.list_users']() %}
+{% set fellas = [] %}
+
+{% for user in userlist %}
+{% if salt['user.info'](user)["gid"] >= 1000 and salt['user.info'](user)["shell"] != '/usr/bin/nologin' %}
+    {% set fellas = fellas.append(user)%}
+{% endif %}
+{% endfor %}
