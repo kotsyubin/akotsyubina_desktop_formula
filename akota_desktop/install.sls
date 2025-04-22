@@ -6,7 +6,7 @@
 
 {% set default_pkgs = package_sources["default"] %}
 
-{% for package in desired %} 
+{% for package in desired %}
     {% if package not in default_pkgs and package not in generic_package_sources["AppImage"] and package not in generic_package_sources["Flatpak"] %}
          {% do salt['slsutil.update'](default_pkgs, {package: package}) %}
     {% elif package in generic_package_sources["Flatpak"] %}
@@ -23,8 +23,12 @@
 {% endfor %}
 
 {% for package in desired %}
+{% if ( salt['pkg.available_version'](package) or salt['pkg.version'](package)) %}
 {{ package }}:
     pkg.installed
+{% else %}
+{% do salt['log.error'](package ~ " isn't avaivable in enabled repos") %}
+{% endif %}
 {% endfor %}
 
 {% if appimages %}
@@ -39,8 +43,11 @@ installing_AppImage_{{ appimage }}:
     file.managed:
         - name: /usr/appimage/{{ appimage }}.AppImage
         - mode: '0755'
-        - source: {{ generic_package_sources["AppImage"][appimage] }}
+        - source: {{ generic_package_sources["AppImage"][appimage]["src"] }}
         - skip_verify: True
+{% if appimage["desktopfile"] %}
+{% do salt['log.error'](".desktop file install not implemented yet!") %}
+{% endif %}
 {% endfor %}
 {% endif %}
 

@@ -11,5 +11,5 @@ extract_telegram:
 {% for user in fellas %}
 telegram_first_run_{{ user }}:
   cmd.run:
-    - name: /usr/Telegram/Updater
+    - name: /usr/Telegram/Updater && sleep 1s && pkill Telegram
 {% endfor %}
