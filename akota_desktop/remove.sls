@@ -30,20 +30,43 @@
 {% for package in desired %}
 {% if ( salt['pkg.available_version'](package) or salt['pkg.version'](package)) %}
 {{ package }}:
-    pkg.installed
+    pkg.purged
 {% else %}
 {% do salt['log.error'](package ~ " isn't avaivable in enabled repos") %}
 {% endif %}
 {% endfor %}
 
 {% if appimages %}
-{% include 'akota_desktop/appimage_install.sls' with context %}
+{% for appimage in appimages %}
+Removing_AppImage_{{ appimage }}:
+    file.absent:
+        - name: /usr/appimage/{{ appimage }}.AppImage
+{% if appimage["desktopfile"] %}
+{% do salt['log.error'](".desktop file removal isn't implemented yet!") %}
+{% endif %}
+{% endfor %}
 {% endif %}
 
 {% if flatpaks %}
-{% include 'akota_desktop/flatpak_install.sls' with context %}
+flatpak:
+    pkg.installed
+{% for flatpak in flatpaks %}
+    cmd.run:
+        - name: "flatpak uninstall -y {{ generic_package_sources["Flatpak"][flatpak]["id"] }}"
+{% endfor %}
+
 {% endif %}
 
 {% if arches %}
-{% include 'akota_desktop/archive_install.sls' with context %}
+{% for archive in arches %}
+removing_{{ archive }}:
+  file.absent:
+    - name: /usr/{{ archive }}
+removing_{{ archive }}_icon:
+  file.absent:
+    - name: /usr/share/icons/{{ generic_package_sources["Archive"][archive]["icon"] }}
+removing_{{ archive }}_desktop_entry:
+    file.absent:
+     - name: /usr/share/applications/{{ generic_package_sources["Archive"][archive]["id"] }}.desktop
+{% endfor %}
 {% endif %}

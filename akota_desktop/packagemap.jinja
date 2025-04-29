@@ -1,7 +1,4 @@
 {% set package_sources = salt['grains.filter_by']({
-        'Fedora': {
-                'default': {},
-        },
         'Arch': {
                 'default': {},
         },
@@ -12,7 +9,6 @@
                 'python-virtualenv':'python3-virtualenv'
                 },
                 'custom_repos': {
-                'vts':'ppa:deadsnakes/ppa',
                 'opentofu':'deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main',
                 }
         },
@@ -21,12 +17,22 @@
 {% set generic_package_sources = {
                 'AppImage': {
                         'nekoray': {
-                                'src':'https://github.com/MatsuriDayo/nekoray/releases/download/4.0.1/nekoray-4.0.1-2024-12-12-linux-x64.AppImage'
+                                'src':'https://github.com/MatsuriDayo/nekoray/releases/download/4.0.1/nekoray-4.0.1-2024-12-12-linux-x64.AppImage',
+                                'pretty_name':'NekoRay',
+                                'exec_path':'nekoray.AppImage',
+                                'icon':'nekoray.png',
+                                'id':'nekoray',
+                                'comment':"Qt based cross-platform GUI proxy configuration manager (backend: sing-box)"
                         }
                 },
                 'Flatpak': {
-                        'keyguard':'https://github.com/AChep/keyguard-app/releases/download/r20250324/Keyguard.flatpak',
-                        'podman':'https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2.flatpak'
+                        'keyguard': {
+                                'id':'com.artemchep.keyguard',
+                                'src':'https://github.com/AChep/keyguard-app/releases/download/r20250324/Keyguard.flatpak'},
+                        'podman': {
+                                'id':'io.podman_desktop.PodmanDesktop',
+                                'src':'https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2.flatpak'}
                 },
+                'Archive': {}
         } 
 %}

@@ -1,0 +1,14 @@
+{% set settings = salt['pillar.get']('desktop-entry', {}) -%}
+[Desktop Entry]
+Type=Application
+Name={{ pretty_name }}
+{% if comment is defined %}
+Comment={{ comment }}
+{% endif %}
+Path={{ folder }}
+Exec={{ folder }}/{{ exec_path }}
+Icon={{ icon }}
+Terminal=false
+{% if categories is defined %}
+Categories={{ categories|join(';') }}
+{% endif %}

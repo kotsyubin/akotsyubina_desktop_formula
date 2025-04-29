@@ -1,0 +1,24 @@
+{% set package_sources = salt['grains.filter_by']({
+        'Arch': {
+                'default': {},
+        },
+        'Debian': {
+                'default': {}
+        },
+}, merge=salt['pillar.get']('packages')) %}
+
+{% set generic_package_sources = {
+                'AppImage': {},
+                'Flatpak': {},
+                'Archive': {
+                        'tagstudio':{
+                                'src':'https://github.com/TagStudioDev/TagStudio/releases/latest/download/tagstudio_linux_x86_64.tar.gz',
+                                'pretty_name':'Tag Studio',
+                                'exec_path':'tagstudio/tagstudio',
+                                'icon':'tagstudio.png',
+                                'id':'tagstudio',
+                                'comment':"TagStudio is a photo & file organization application with an underlying tag-based system that focuses on giving freedom and flexibility to the user"
+                        }
+                }
+        } 
+%}

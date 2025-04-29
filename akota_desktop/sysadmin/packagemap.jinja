@@ -1,0 +1,18 @@
+{% set package_sources = salt['grains.filter_by']({
+        'Arch': {
+                'default': {},
+        },
+        'Debian': {
+                'default': {}
+        },
+}, merge=salt['pillar.get']('packages')) %}
+
+{% set generic_package_sources = {
+                'AppImage': {},
+                'Flatpak': {},
+                'Archive': {
+                        'apache-directory-studio':{
+                                'src':'https://dlcdn.apache.org/directory/studio/2.0.0.v20210717-M17/ApacheDirectoryStudio-2.0.0.v20210717-M17-linux.gtk.x86_64.tar.gz'
+                }
+        } 
+%}
